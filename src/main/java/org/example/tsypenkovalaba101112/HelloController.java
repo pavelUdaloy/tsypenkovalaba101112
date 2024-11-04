@@ -45,6 +45,8 @@ public class HelloController {
     private TableColumn<Child, String> genderCol;
     @FXML
     private TableColumn<Child, String> photoCol;
+    @FXML
+    private TableColumn<Child, Long> parentIdCol;
 
     private final ObservableList<Child> childrenList = FXCollections.observableArrayList();
 
@@ -56,6 +58,7 @@ public class HelloController {
         birthDayCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBirthDay().toString()));
         genderCol.setCellValueFactory(cellData -> cellData.getValue().genderProperty());
         photoCol.setCellValueFactory(cellData -> cellData.getValue().photoProperty());
+        parentIdCol.setCellValueFactory(cellData -> new SimpleLongProperty(cellData.getValue().getParentId()).asObject());
         reloadChildren();
     }
 
@@ -63,12 +66,16 @@ public class HelloController {
         try {
             childrenList.clear();
             ResultSet rs = DatabaseHelper.getChildren();
-            while (rs.next()) {
-                Child child = new Child(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"),
-                        rs.getTimestamp("birth_day").toLocalDateTime(), rs.getString("gender"), rs.getString("photo"));
-                childrenList.add(child);
+            if (rs != null) {
+
+                while (rs.next()) {
+                    Child child = new Child(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"),
+                            rs.getTimestamp("birth_day").toLocalDateTime(), rs.getString("gender"), rs.getString("photo"),
+                            rs.getLong("parent_id"));
+                    childrenList.add(child);
+                }
+                childrenTable.setItems(childrenList);
             }
-            childrenTable.setItems(childrenList);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,8 +128,10 @@ public class HelloController {
         birthDayField.setPromptText("Дата рождения (YYYY-MM-DD HH:MM:SS)");
         TextField photoField = new TextField();
         photoField.setPromptText("URL фотографии");
+        TextField parentIdField = new TextField();
+        parentIdField.setPromptText("ID родителя");
 
-        VBox vbox = new VBox(10, firstNameField, lastNameField, genderField, birthDayField, photoField);
+        VBox vbox = new VBox(10, firstNameField, lastNameField, genderField, birthDayField, photoField, parentIdField);
         dialog.getDialogPane().setContent(vbox);
 
         ButtonType addButtonType = new ButtonType("Добавить", ButtonData.OK_DONE);
@@ -142,7 +151,9 @@ public class HelloController {
                 }
 
                 String photo = photoField.getText();
-                return new Child(null, firstName, lastName, birthDay, gender, photo);
+                Long parentId = parentIdField.getText().isEmpty() ? 1 : Long.parseLong(parentIdField.getText());
+
+                return new Child(null, firstName, lastName, birthDay, gender, photo, parentId);
             }
             return null;
         });
@@ -180,8 +191,9 @@ public class HelloController {
         birthDayField.setPromptText("Дата рождения (YYYY-MM-DD HH:MM:SS)");
         TextField photoField = new TextField(selectedChild.getPhoto());
         photoField.setPromptText("URL фотографии");
+        TextField parentIdField = new TextField(selectedChild.getParentId() != null ? selectedChild.getParentId().toString() : "");
 
-        VBox vbox = new VBox(10, firstNameField, lastNameField, genderField, birthDayField, photoField);
+        VBox vbox = new VBox(10, firstNameField, lastNameField, genderField, birthDayField, photoField, parentIdField);
         dialog.getDialogPane().setContent(vbox);
 
         ButtonType saveButtonType = new ButtonType("Сохранить", ButtonData.OK_DONE);
@@ -195,6 +207,7 @@ public class HelloController {
                 String birthDayStr = birthDayField.getText().replace(" ", "T");
                 LocalDateTime birthDay = birthDayStr.isEmpty() ? selectedChild.getBirthDay() : LocalDateTime.parse(birthDayStr);
                 String photo = photoField.getText();
+                Long parentId = parentIdField.getText().isEmpty() ? selectedChild.getParentId() : Long.parseLong(parentIdField.getText());
 
                 return new Child(
                         selectedChild.getId(),
@@ -202,7 +215,8 @@ public class HelloController {
                         lastName.isEmpty() ? selectedChild.getLastName() : lastName,
                         birthDay,
                         gender.isEmpty() ? selectedChild.getGender() : gender,
-                        photo.isEmpty() ? selectedChild.getPhoto() : photo
+                        photo.isEmpty() ? selectedChild.getPhoto() : photo,
+                        parentId
                 );
             }
             return null;

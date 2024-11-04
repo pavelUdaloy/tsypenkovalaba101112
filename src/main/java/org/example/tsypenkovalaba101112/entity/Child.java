@@ -1,6 +1,5 @@
 package org.example.tsypenkovalaba101112.entity;
 
-import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
@@ -15,14 +14,16 @@ public class Child {
     private final SimpleObjectProperty<LocalDateTime> birthDay;
     private final StringProperty gender;
     private final StringProperty photo;
+    private final Long parentId;
 
-    public Child(Long id, String firstName, String lastName, LocalDateTime birthDay, String gender, String photo) {
+    public Child(Long id, String firstName, String lastName, LocalDateTime birthDay, String gender, String photo, Long parentId) {
         this.id = id;
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.birthDay = new SimpleObjectProperty<>(birthDay);
         this.gender = new SimpleStringProperty(gender);
         this.photo = new SimpleStringProperty(photo);
+        this.parentId = parentId;
     }
 
     public Long getId() {
@@ -67,6 +68,14 @@ public class Child {
 
     public StringProperty photoProperty() {
         return photo;
+    }
+
+    public Long parentIdProperty() {
+        return parentId;
+    }
+
+    public Long getParentId() {
+        return parentId;
     }
 
     @Override

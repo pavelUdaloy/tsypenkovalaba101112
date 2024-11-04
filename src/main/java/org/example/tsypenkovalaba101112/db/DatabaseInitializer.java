@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseInitializer {
+
     public static void initializeDatabase() {
         try (Connection connection = DatabaseConnector.getConnection();
              Statement statement = connection.createStatement()) {
@@ -25,20 +26,20 @@ public class DatabaseInitializer {
                     "photo VARCHAR(255) NOT NULL," +
                     "parent_id BIGINT," +
                     "registered_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
-                    "FOREIGN KEY (parent_id) REFERENCES parents(id)" +
+                    "FOREIGN KEY (parent_id) REFERENCES parents(id)," +
+                    "UNIQUE (first_name, last_name)" +
                     ");");
 
-            try {
-                statement.executeUpdate("INSERT INTO parents (mother_first_name, father_first_name, last_name) VALUES " +
-                        "('svetlana', 'alexandr', 'tsypenkovy'), " +
-                        "('anna', 'viktor', 'metezh');");
+            // Выполнение вставок
+            int parentsInserted = statement.executeUpdate("INSERT IGNORE INTO parents (mother_first_name, father_first_name, last_name) VALUES " +
+                    "('svetlana', 'alexandr', 'tsypenkovy'), " +
+                    "('anna', 'viktor', 'metezh');");
+            System.out.println(parentsInserted + " parents inserted.");
 
-                statement.executeUpdate("INSERT INTO childs (first_name, last_name, gender, birth_day, photo, parent_id) VALUES " +
-                        "('liza', 'tsypenkova', 'female', '2005-10-01 10:00:00', 'https://vitae.com.ua/wp-content/uploads/2020/05/gallery4-1170x650.jpg', 1), " +
-                        "('ksusha', 'metezh', 'female', '2010-10-02 10:00:00', 'https://masterpiecer-images.s3.yandex.net/5fd1df458f8b387:upscaled', 2);");
-            } catch (Exception e) {
-                // ignore
-            }
+            int childrenInserted = statement.executeUpdate("INSERT IGNORE INTO childs (first_name, last_name, gender, birth_day, photo, parent_id) VALUES " +
+                    "('liza', 'tsypenkova', 'female', '2005-10-01 10:00:00', 'https://vitae.com.ua/wp-content/uploads/2020/05/gallery4-1170x650.jpg', 1), " +
+                    "('ksusha', 'metezh', 'female', '2010-10-02 10:00:00', 'https://masterpiecer-images.s3.yandex.net/5fd1df458f8b387:upscaled', 2);");
+            System.out.println(childrenInserted + " children inserted.");
 
             System.out.println("Sql command executed.");
         } catch (SQLException e) {

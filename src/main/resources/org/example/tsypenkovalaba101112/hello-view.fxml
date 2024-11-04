@@ -21,6 +21,7 @@
       <TableColumn fx:id="birthDayCol" text="Birth Day" />
       <TableColumn fx:id="genderCol" text="Gender" />
       <TableColumn fx:id="photoCol" text="Photo" />
+      <TableColumn fx:id="parentIdCol" text="Parent Id" />
     </columns>
   </TableView>
 

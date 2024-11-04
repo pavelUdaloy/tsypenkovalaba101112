@@ -10,7 +10,19 @@ public class DatabaseConnector {
     public static final String PASSWORD = "12345678";
 
     public static Connection getConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        Connection connection = null;
+        while (connection == null) {
+            try {
+                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            } catch (Exception e) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    // ignore
+                }
+            }
+        }
+
         System.out.println("DB connected.");
         return connection;
     }
