@@ -182,7 +182,7 @@ public class DatabaseHelper {
             statement.setString(3, child.getGender());
             statement.setTimestamp(4, java.sql.Timestamp.valueOf(child.getBirthDay()));
             statement.setString(5, child.getPhoto());
-            statement.setLong(7, child.getId());
+            statement.setLong(6, child.getId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
