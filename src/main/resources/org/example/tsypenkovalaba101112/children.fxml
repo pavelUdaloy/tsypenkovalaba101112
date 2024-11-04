@@ -15,7 +15,7 @@
 
   <TableView fx:id="childrenTable" styleClass="table-view">
     <columns>
-      <TableColumn fx:id="idCol" text="Номер" />
+      <TableColumn fx:id="idCol" text="Номер" prefWidth="0" visible="false" />
       <TableColumn fx:id="firstNameCol" text="Имя" />
       <TableColumn fx:id="lastNameCol" text="Фамилия" />
       <TableColumn fx:id="birthDayCol" text="Дата рождения" />

@@ -15,7 +15,7 @@
 
   <TableView fx:id="parentsTable" styleClass="table-view">
     <columns>
-      <TableColumn fx:id="parentIdColInParents" text="Айди" />
+      <TableColumn fx:id="parentIdColInParents" text="Айди" prefWidth="0" visible="false" />
       <TableColumn fx:id="parentMotherFirstNameCol" text="Мамино имя" />
       <TableColumn fx:id="parentFatherFirstNameCol" text="Папино имя" />
       <TableColumn fx:id="parentLastNameCol" text="Фамилия" />
