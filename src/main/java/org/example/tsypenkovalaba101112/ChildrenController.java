@@ -21,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.tsypenkovalaba101112.db.DatabaseHelper;
 import org.example.tsypenkovalaba101112.entity.Child;
+import org.example.tsypenkovalaba101112.entity.ChildView;
 import org.example.tsypenkovalaba101112.entity.Parent;
 
 import java.sql.ResultSet;
@@ -36,23 +37,25 @@ import static org.example.tsypenkovalaba101112.db.DatabaseConnector.USER;
 public class ChildrenController {
 
     @FXML
-    private TableView<Child> childrenTable;
+    private TableView<ChildView> childrenTable;
     @FXML
-    private TableColumn<Child, Long> idCol;
+    private TableColumn<ChildView, Long> idCol;
     @FXML
-    private TableColumn<Child, String> firstNameCol;
+    private TableColumn<ChildView, String> firstNameCol;
     @FXML
-    private TableColumn<Child, String> lastNameCol;
+    private TableColumn<ChildView, String> lastNameCol;
     @FXML
-    private TableColumn<Child, String> birthDayCol;
+    private TableColumn<ChildView, String> birthDayCol;
     @FXML
-    private TableColumn<Child, String> genderCol;
+    private TableColumn<ChildView, String> genderCol;
     @FXML
-    private TableColumn<Child, String> photoCol;
+    private TableColumn<ChildView, String> photoCol;
     @FXML
-    private TableColumn<Child, Long> parentIdCol;
+    private TableColumn<ChildView, String> parentFatherNameCol;
+    @FXML
+    private TableColumn<ChildView, String> parentMotherNameCol;
 
-    private final ObservableList<Child> childrenList = FXCollections.observableArrayList();
+    private final ObservableList<ChildView> childrenList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -65,7 +68,8 @@ public class ChildrenController {
         birthDayCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBirthDay().toString()));
         genderCol.setCellValueFactory(cellData -> cellData.getValue().genderProperty());
         photoCol.setCellValueFactory(cellData -> cellData.getValue().photoProperty());
-        parentIdCol.setCellValueFactory(cellData -> new SimpleLongProperty(cellData.getValue().getParentId()).asObject());
+        parentFatherNameCol.setCellValueFactory(cellData -> cellData.getValue().parentFatherNameProperty());
+        parentMotherNameCol.setCellValueFactory(cellData -> cellData.getValue().parentMotherNameProperty());
         reloadChildren();
     }
 
@@ -76,9 +80,9 @@ public class ChildrenController {
             if (rs != null) {
 
                 while (rs.next()) {
-                    Child child = new Child(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"),
+                    ChildView child = new ChildView(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"),
                             rs.getTimestamp("birth_day").toLocalDateTime(), rs.getString("gender"), rs.getString("photo"),
-                            rs.getLong("parent_id"));
+                            rs.getString("father_first_name"), rs.getString("mother_first_name"));
                     childrenList.add(child);
                 }
                 childrenTable.setItems(childrenList);
@@ -98,7 +102,7 @@ public class ChildrenController {
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
             String name = result.get();
-            List<Child> foundChildren = DatabaseHelper.searchChildrenByName(name);
+            List<ChildView> foundChildren = DatabaseHelper.searchChildrenByName(name);
             childrenList.clear();
             childrenList.addAll(foundChildren);
             childrenTable.setItems(childrenList);
@@ -165,7 +169,7 @@ public class ChildrenController {
 
     @FXML
     protected void onEditChildButtonClick() {
-        Child selectedChild = childrenTable.getSelectionModel().getSelectedItem();
+        ChildView selectedChild = childrenTable.getSelectionModel().getSelectedItem();
         if (selectedChild == null) {
             Alert alert = new Alert(AlertType.WARNING);
             alert.setTitle("Предупреждение");
@@ -189,9 +193,8 @@ public class ChildrenController {
         birthDayField.setPromptText("Дата рождения (YYYY-MM-DD HH:MM:SS)");
         TextField photoField = new TextField(selectedChild.getPhoto());
         photoField.setPromptText("URL фотографии");
-        TextField parentIdField = new TextField(selectedChild.getParentId() != null ? selectedChild.getParentId().toString() : "");
 
-        VBox vbox = new VBox(10, firstNameField, lastNameField, genderField, birthDayField, photoField, parentIdField);
+        VBox vbox = new VBox(10, firstNameField, lastNameField, genderField, birthDayField, photoField);
         dialog.getDialogPane().setContent(vbox);
 
         ButtonType saveButtonType = new ButtonType("Сохранить", ButtonData.OK_DONE);
@@ -205,7 +208,6 @@ public class ChildrenController {
                 String birthDayStr = birthDayField.getText().replace(" ", "T");
                 LocalDateTime birthDay = birthDayStr.isEmpty() ? selectedChild.getBirthDay() : LocalDateTime.parse(birthDayStr);
                 String photo = photoField.getText();
-                Long parentId = parentIdField.getText().isEmpty() ? selectedChild.getParentId() : Long.parseLong(parentIdField.getText());
 
                 return new Child(
                         selectedChild.getId(),
@@ -213,8 +215,7 @@ public class ChildrenController {
                         lastName.isEmpty() ? selectedChild.getLastName() : lastName,
                         birthDay,
                         gender.isEmpty() ? selectedChild.getGender() : gender,
-                        photo.isEmpty() ? selectedChild.getPhoto() : photo,
-                        parentId
+                        photo.isEmpty() ? selectedChild.getPhoto() : photo
                 );
             }
             return null;
@@ -229,7 +230,7 @@ public class ChildrenController {
 
     @FXML
     protected void onDeleteChildButtonClick() {
-        Child selectedChild = childrenTable.getSelectionModel().getSelectedItem();
+        ChildView selectedChild = childrenTable.getSelectionModel().getSelectedItem();
         if (selectedChild != null) {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Подтверждение удаления");

@@ -1,6 +1,7 @@
 package org.example.tsypenkovalaba101112.db;
 
 import org.example.tsypenkovalaba101112.entity.Child;
+import org.example.tsypenkovalaba101112.entity.ChildView;
 import org.example.tsypenkovalaba101112.entity.Parent;
 
 import java.sql.CallableStatement;
@@ -134,7 +135,7 @@ public class DatabaseHelper {
         try {
             Connection connection = DatabaseConnector.getConnection();
             Statement statement = connection.createStatement();
-            return statement.executeQuery("SELECT * FROM childs");
+            return statement.executeQuery("SELECT * FROM children_with_parents_info");
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -172,7 +173,7 @@ public class DatabaseHelper {
     }
 
     public static void updateChild(Child child) {
-        String sql = "UPDATE childs SET first_name = ?, last_name = ?, gender = ?, birth_day = ?, photo = ?, parent_id = ? WHERE id = ?";
+        String sql = "UPDATE childs SET first_name = ?, last_name = ?, gender = ?, birth_day = ?, photo = ? WHERE id = ?";
         try (Connection connection = DatabaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -181,7 +182,6 @@ public class DatabaseHelper {
             statement.setString(3, child.getGender());
             statement.setTimestamp(4, java.sql.Timestamp.valueOf(child.getBirthDay()));
             statement.setString(5, child.getPhoto());
-            statement.setLong(6, child.getParentId());
             statement.setLong(7, child.getId());
 
             statement.executeUpdate();
@@ -190,9 +190,9 @@ public class DatabaseHelper {
         }
     }
 
-    public static List<Child> searchChildrenByName(String name) {
-        List<Child> children = new ArrayList<>();
-        String sql = "SELECT * FROM childs WHERE first_name LIKE ?";
+    public static List<ChildView> searchChildrenByName(String name) {
+        List<ChildView> children = new ArrayList<>();
+        String sql = "SELECT * FROM children_with_parents_info WHERE first_name LIKE ?";
         try (Connection connection = DatabaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -200,9 +200,9 @@ public class DatabaseHelper {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Child child = new Child(resultSet.getLong("id"), resultSet.getString("first_name"),
-                        resultSet.getString("last_name"), resultSet.getTimestamp("birth_day").toLocalDateTime(),
-                        resultSet.getString("gender"), resultSet.getString("photo"), resultSet.getLong("parent_id"));
+                ChildView child = new ChildView(resultSet.getLong("id"), resultSet.getString("first_name"), resultSet.getString("last_name"),
+                        resultSet.getTimestamp("birth_day").toLocalDateTime(), resultSet.getString("gender"), resultSet.getString("photo"),
+                        resultSet.getString("father_first_name"), resultSet.getString("mother_first_name"));
                 children.add(child);
             }
         } catch (SQLException e) {

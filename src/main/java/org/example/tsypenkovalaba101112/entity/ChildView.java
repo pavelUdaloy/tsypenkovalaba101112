@@ -1,12 +1,12 @@
 package org.example.tsypenkovalaba101112.entity;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.time.LocalDateTime;
 
-public class Child {
+public class ChildView {
 
     private final Long id;
     private final StringProperty firstName;
@@ -14,26 +14,18 @@ public class Child {
     private final SimpleObjectProperty<LocalDateTime> birthDay;
     private final StringProperty gender;
     private final StringProperty photo;
-    private final Long parentId;
+    private final StringProperty parentFatherName;
+    private final StringProperty parentMotherName;
 
-    public Child(Long id, String firstName, String lastName, LocalDateTime birthDay, String gender, String photo, Long parentId) {
+    public ChildView(Long id, String firstName, String lastName, LocalDateTime birthDay, String gender, String photo, String parentFatherName, String parentMotherName) {
         this.id = id;
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.birthDay = new SimpleObjectProperty<>(birthDay);
         this.gender = new SimpleStringProperty(gender);
         this.photo = new SimpleStringProperty(photo);
-        this.parentId = parentId;
-    }
-
-    public Child(Long id, String firstName, String lastName, LocalDateTime birthDay, String gender, String photo) {
-        this.id = id;
-        this.firstName = new SimpleStringProperty(firstName);
-        this.lastName = new SimpleStringProperty(lastName);
-        this.birthDay = new SimpleObjectProperty<>(birthDay);
-        this.gender = new SimpleStringProperty(gender);
-        this.photo = new SimpleStringProperty(photo);
-        this.parentId = null;
+        this.parentFatherName = new SimpleStringProperty(parentFatherName);
+        this.parentMotherName = new SimpleStringProperty(parentMotherName);
     }
 
     public Long getId() {
@@ -80,12 +72,20 @@ public class Child {
         return photo;
     }
 
-    public Long parentIdProperty() {
-        return parentId;
+    public String getParentFatherName() {
+        return parentFatherName.get();
     }
 
-    public Long getParentId() {
-        return parentId;
+    public StringProperty parentFatherNameProperty() {
+        return parentFatherName;
+    }
+
+    public String getParentMotherName() {
+        return parentMotherName.get();
+    }
+
+    public StringProperty parentMotherNameProperty() {
+        return parentMotherName;
     }
 
     @Override

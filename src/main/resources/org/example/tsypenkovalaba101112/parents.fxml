@@ -15,10 +15,10 @@
 
   <TableView fx:id="parentsTable" styleClass="table-view">
     <columns>
-      <TableColumn fx:id="parentIdColInParents" text="Id" />
-      <TableColumn fx:id="parentMotherFirstNameCol" text="Mother First Name" />
-      <TableColumn fx:id="parentFatherFirstNameCol" text="Father First Name" />
-      <TableColumn fx:id="parentLastNameCol" text="Last Name" />
+      <TableColumn fx:id="parentIdColInParents" text="Айди" />
+      <TableColumn fx:id="parentMotherFirstNameCol" text="Мамино имя" />
+      <TableColumn fx:id="parentFatherFirstNameCol" text="Папино имя" />
+      <TableColumn fx:id="parentLastNameCol" text="Фамилия" />
     </columns>
   </TableView>
 

@@ -15,13 +15,14 @@
 
   <TableView fx:id="childrenTable" styleClass="table-view">
     <columns>
-      <TableColumn fx:id="idCol" text="Id" />
-      <TableColumn fx:id="firstNameCol" text="First Name" />
-      <TableColumn fx:id="lastNameCol" text="Last Name" />
-      <TableColumn fx:id="birthDayCol" text="Birth Day" />
-      <TableColumn fx:id="genderCol" text="Gender" />
-      <TableColumn fx:id="photoCol" text="Photo" />
-      <TableColumn fx:id="parentIdCol" text="Parent Id" />
+      <TableColumn fx:id="idCol" text="Номер" />
+      <TableColumn fx:id="firstNameCol" text="Имя" />
+      <TableColumn fx:id="lastNameCol" text="Фамилия" />
+      <TableColumn fx:id="birthDayCol" text="Дата рождения" />
+      <TableColumn fx:id="genderCol" text="Пол" />
+      <TableColumn fx:id="photoCol" text="Фото" />
+      <TableColumn fx:id="parentFatherNameCol" text="Папино имя" />
+      <TableColumn fx:id="parentMotherNameCol" text="Мамино имя" />
     </columns>
   </TableView>
 

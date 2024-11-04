@@ -62,6 +62,11 @@ public class DatabaseInitializer {
                     "    HAVING COUNT(c.id) >= 3; " +
                     "END;");
 
+            statement.executeUpdate("CREATE VIEW IF NOT EXISTS children_with_parents_info AS " +
+                    "SELECT c.id, c.first_name, c.last_name, c.birth_day, c.gender, c.photo, p.mother_first_name, p.father_first_name " +
+                    "FROM childs c " +
+                    "JOIN parents p ON p.id = c.parent_id;");
+
             System.out.println("Sql command executed.");
         } catch (SQLException e) {
             e.printStackTrace();
