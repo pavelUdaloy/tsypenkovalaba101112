@@ -17,6 +17,13 @@ public class Parent {
         this.lastName = new SimpleStringProperty(lastName);
     }
 
+    public Parent(Long id, String lastName) {
+        this.id = id;
+        this.fatherFirstName = null;
+        this.motherFirstName = null;
+        this.lastName = new SimpleStringProperty(lastName);
+    }
+
     public Long getId() {
         return id;
     }
@@ -47,6 +54,10 @@ public class Parent {
 
     @Override
     public String toString() {
-        return id + " " + motherFirstName.get() + " & " + fatherFirstName.get() + " " + lastName.get();
+        String motherName = motherFirstName != null ? motherFirstName.get() : "не указано";
+        String fatherName = fatherFirstName != null ? fatherFirstName.get() : "не указано";
+        String lastNameValue = lastName.get() != null ? lastName.get() : "не указано";
+
+        return id + " " + lastNameValue;
     }
 }

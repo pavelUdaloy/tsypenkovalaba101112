@@ -11,7 +11,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -130,10 +132,14 @@ public class ChildrenController {
         birthDayField.setPromptText("Дата рождения (YYYY-MM-DD HH:MM:SS)");
         TextField photoField = new TextField();
         photoField.setPromptText("URL фотографии");
-        TextField parentIdField = new TextField();
-        parentIdField.setPromptText("ID родителя");
 
-        VBox vbox = new VBox(10, firstNameField, lastNameField, genderField, birthDayField, photoField, parentIdField);
+        ComboBox<Parent> parentComboBox = new ComboBox<>();
+        parentComboBox.setPromptText("Выберите родителя");
+
+        List<Parent> parents = DatabaseHelper.getParentsList();
+        parentComboBox.getItems().addAll(parents);
+
+        VBox vbox = new VBox(10, firstNameField, lastNameField, genderField, birthDayField, photoField, parentComboBox);
         dialog.getDialogPane().setContent(vbox);
 
         ButtonType addButtonType = new ButtonType("Добавить", ButtonData.OK_DONE);
@@ -141,19 +147,33 @@ public class ChildrenController {
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addButtonType) {
-                String firstName = firstNameField.getText();
-                String lastName = lastNameField.getText();
-                String gender = genderField.getText();
-                String birthDayText = birthDayField.getText();
+                String firstName = firstNameField.getText().trim();
+                String lastName = lastNameField.getText().trim();
+                String gender = genderField.getText().trim();
+                String birthDayText = birthDayField.getText().trim();
                 LocalDateTime birthDay;
+
+                // Проверка и парсинг даты
                 if (!birthDayText.isEmpty()) {
-                    birthDay = LocalDateTime.parse(birthDayText);
+                    try {
+                        birthDay = LocalDateTime.parse(birthDayText);
+                    } catch (Exception e) {
+                        showAlert("Ошибка", "Неверный формат даты рождения.");
+                        return null;
+                    }
                 } else {
                     birthDay = LocalDateTime.now();
                 }
 
-                String photo = photoField.getText();
-                Long parentId = parentIdField.getText().isEmpty() ? 1 : Long.parseLong(parentIdField.getText());
+                String photo = photoField.getText().trim();
+                Parent selectedParent = parentComboBox.getValue();
+                Long parentId = selectedParent != null ? selectedParent.getId() : null;
+
+                // Проверка обязательных полей
+                if (firstName.isEmpty() || lastName.isEmpty() || gender.isEmpty() || parentId == null) {
+                    showAlert("Ошибка", "Пожалуйста, заполните все обязательные поля.");
+                    return null;
+                }
 
                 return new Child(null, firstName, lastName, birthDay, gender, photo, parentId);
             }
@@ -166,6 +186,23 @@ public class ChildrenController {
             reloadChildren();
         });
     }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private String getParentFatherName(Long parentId) {
+        return DatabaseHelper.getParentFatherName(parentId);
+    }
+
+    private String getParentMotherName(Long parentId) {
+        return DatabaseHelper.getParentMotherName(parentId);
+    }
+
 
     @FXML
     protected void onEditChildButtonClick() {

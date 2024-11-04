@@ -26,6 +26,62 @@ public class DatabaseHelper {
         }
     }
 
+    public static String getParentFatherName(Long parentId) {
+        String fatherName = null;
+        String query = "SELECT father_first_name FROM parents WHERE id = ?";
+
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setLong(1, parentId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                fatherName = rs.getString("father_first_name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return fatherName != null ? fatherName : "Неизвестно";
+    }
+
+    public static String getParentMotherName(Long parentId) {
+        String motherName = null;
+        String query = "SELECT mother_first_name FROM parents WHERE id = ?";
+
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setLong(1, parentId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                motherName = rs.getString("mother_first_name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return motherName != null ? motherName : "Неизвестно";
+    }
+
+    public static List<Parent> getParentsList() {
+        List<Parent> parents = new ArrayList<>();
+        String query = "SELECT id, last_name FROM parents";
+
+        try (Connection conn = DatabaseConnector.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                Long id = rs.getLong("id");
+                String lastName = rs.getString("last_name");
+                parents.add(new Parent(id, lastName));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return parents;
+    }
+
     public static void addParent(Parent parent) {
         String sql = "INSERT INTO parents (mother_first_name, father_first_name, last_name) VALUES (?, ?, ?)";
         try (Connection connection = DatabaseConnector.getConnection();
