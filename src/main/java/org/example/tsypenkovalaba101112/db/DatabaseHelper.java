@@ -1,6 +1,7 @@
 package org.example.tsypenkovalaba101112.db;
 
 import org.example.tsypenkovalaba101112.entity.Child;
+import org.example.tsypenkovalaba101112.entity.Parent;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +12,82 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper {
+
+    public static ResultSet getParents() {
+        try {
+            Connection connection = DatabaseConnector.getConnection();
+            Statement statement = connection.createStatement();
+            return statement.executeQuery("SELECT * FROM parents");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void addParent(Parent parent) {
+        String sql = "INSERT INTO parents (mother_first_name, father_first_name, last_name) VALUES (?, ?, ?)";
+        try (Connection connection = DatabaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, parent.getMotherFirstName());
+            statement.setString(2, parent.getFatherFirstName());
+            statement.setString(3, parent.getLastName());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteParent(long id) {
+        String sql = "DELETE FROM parents WHERE id = ?";
+        try (Connection connection = DatabaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setLong(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateParent(Parent parent) {
+        String sql = "UPDATE parents SET mother_first_name = ?, father_first_name = ?, last_name = ? WHERE id = ?";
+        try (Connection connection = DatabaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, parent.getMotherFirstName());
+            statement.setString(2, parent.getFatherFirstName());
+            statement.setString(3, parent.getLastName());
+            statement.setLong(4, parent.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Parent> searchParentsByLastName(String name) {
+        List<Parent> parents = new ArrayList<>();
+        String sql = "SELECT * FROM parents WHERE last_name LIKE ?";
+        try (Connection connection = DatabaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, '%' + name + '%');
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Parent parent = new Parent(resultSet.getLong("id"),
+                        resultSet.getString("mother_first_name"),
+                        resultSet.getString("father_first_name"),
+                        resultSet.getString("last_name"));
+                parents.add(parent);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return parents;
+    }
 
     public static ResultSet getChildren() {
         try {
