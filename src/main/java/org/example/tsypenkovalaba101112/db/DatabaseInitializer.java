@@ -33,20 +33,34 @@ public class DatabaseInitializer {
             // Выполнение вставок
             int parentsInserted = statement.executeUpdate("INSERT IGNORE INTO parents (mother_first_name, father_first_name, last_name) VALUES " +
                     "('svetlana', 'alexandr', 'tsypenkovy'), " +
+                    "('liudmila', 'igor', 'udalye'), " +
                     "('anna', 'viktor', 'metezh');");
             System.out.println(parentsInserted + " parents inserted.");
 
             int childrenInserted = statement.executeUpdate("INSERT IGNORE INTO childs (first_name, last_name, gender, birth_day, photo, parent_id) VALUES " +
                     "('liza', 'tsypenkova', 'female', '2005-10-01 10:00:00', 'https://vitae.com.ua/wp-content/uploads/2020/05/gallery4-1170x650.jpg', 1), " +
-                    "('ksusha', 'metezh', 'female', '2010-10-02 10:00:00', 'https://masterpiecer-images.s3.yandex.net/5fd1df458f8b387:upscaled', 2);");
+                    "('dasha', 'tsypenkova', 'female', '2010-10-01 10:00:00', 'https://vitae.com.ua/wp-content/uploads/2020/05/gallery4-1170x650.jpg', 1), " +
+                    "('danik', 'tsypenkov', 'male', '2015-10-01 10:00:00', 'https://vitae.com.ua/wp-content/uploads/2020/05/gallery4-1170x650.jpg', 1), " +
+                    "('pasha', 'udaloi', 'male', '2000-10-01 10:00:00', 'https://vitae.com.ua/wp-content/uploads/2020/05/gallery4-1170x650.jpg', 2), " +
+                    "('ksush', 'metezh', 'male', '2015-10-01 10:00:00', 'https://vitae.com.ua/wp-content/uploads/2020/05/gallery4-1170x650.jpg', 3), " +
+                    "('ksusha', 'metezh', 'female', '2010-10-02 10:00:00', 'https://masterpiecer-images.s3.yandex.net/5fd1df458f8b387:upscaled', 3);");
             System.out.println(childrenInserted + " children inserted.");
 
-            statement.executeUpdate("CREATE VIEW parents_with_children AS " +
+            statement.executeUpdate("CREATE VIEW IF NOT EXISTS parents_with_children AS " +
                     "SELECT p.id, p.mother_first_name, p.father_first_name, p.last_name, COUNT(c.id) AS children_count " +
                     "FROM parents p " +
                     "LEFT JOIN childs c ON p.id = c.parent_id " +
                     "GROUP BY p.id, p.mother_first_name, p.father_first_name, p.last_name " +
                     "HAVING COUNT(c.id) >= 2; ");
+
+            statement.executeUpdate("CREATE PROCEDURE IF NOT EXISTS GetParentsWithThreeOrMoreChildren() " +
+                    "BEGIN " +
+                    "    SELECT p.id, p.mother_first_name, p.father_first_name, p.last_name " +
+                    "    FROM parents p " +
+                    "    LEFT JOIN childs c ON p.id = c.parent_id " +
+                    "    GROUP BY p.id " +
+                    "    HAVING COUNT(c.id) >= 3; " +
+                    "END;");
 
             System.out.println("Sql command executed.");
         } catch (SQLException e) {

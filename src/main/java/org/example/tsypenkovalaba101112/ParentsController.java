@@ -215,4 +215,12 @@ public class ParentsController {
         parentsTable.setItems(parentsList);
     }
 
+    @FXML
+    protected void onSearchParentsWithThreeOrMoreChildrenButtonClick() {
+        List<Parent> foundParents = DatabaseHelper.getParentsWithThreeOrMoreChildren();
+        parentsList.clear();
+        parentsList.addAll(foundParents);
+        parentsTable.setItems(parentsList);
+    }
+
 }

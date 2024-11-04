@@ -5,12 +5,13 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.example.tsypenkovalaba101112.HelloController">
-  <padding>
-    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-  </padding>
+      fx:controller="org.example.tsypenkovalaba101112.HelloController"
+      prefWidth="1000.0">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
 
-  <Button text="Настройка подключения" onAction="#onSettingsButtonClick"/>
-  <Button text="Таблица детей" onAction="#onViewChildren"/>
-  <Button text="Таблица родителей" onAction="#onViewParents"/>
+    <Button text="Настройка подключения" onAction="#onSettingsButtonClick"/>
+    <Button text="Таблица детей" onAction="#onViewChildren"/>
+    <Button text="Таблица родителей" onAction="#onViewParents"/>
 </VBox>

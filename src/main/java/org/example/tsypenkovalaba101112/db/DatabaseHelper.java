@@ -3,6 +3,7 @@ package org.example.tsypenkovalaba101112.db;
 import org.example.tsypenkovalaba101112.entity.Child;
 import org.example.tsypenkovalaba101112.entity.Parent;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -95,6 +96,26 @@ public class DatabaseHelper {
 
         try (Connection connection = DatabaseConnector.getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Parent parent = new Parent(rs.getLong("id"),
+                        rs.getString("mother_first_name"),
+                        rs.getString("father_first_name"),
+                        rs.getString("last_name"));
+                parents.add(parent);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return parents;
+    }
+
+    public static List<Parent> getParentsWithThreeOrMoreChildren() {
+        List<Parent> parents = new ArrayList<>();
+        String query = "{CALL GetParentsWithThreeOrMoreChildren()}";
+
+        try (Connection connection = DatabaseConnector.getConnection();
+             CallableStatement stmt = connection.prepareCall(query)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Parent parent = new Parent(rs.getLong("id"),
