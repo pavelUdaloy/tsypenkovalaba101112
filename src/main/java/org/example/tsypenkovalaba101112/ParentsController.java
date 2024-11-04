@@ -206,4 +206,13 @@ public class ParentsController {
     protected void onResetSearchButtonClick() {
         reloadParents();
     }
+
+    @FXML
+    protected void onSearchParentsWithTwoOrMoreChildrenButtonClick() {
+        List<Parent> foundParents = DatabaseHelper.searchParentsWithTwoOrMoreChildren();
+        parentsList.clear();
+        parentsList.addAll(foundParents);
+        parentsTable.setItems(parentsList);
+    }
+
 }

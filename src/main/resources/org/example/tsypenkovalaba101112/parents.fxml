@@ -26,4 +26,6 @@
   <Button text="Добавить запись" onAction="#onAddParentButtonClick"/>
   <Button text="Редактировать запись" onAction="#onEditParentButtonClick"/>
   <Button text="Удалить запись" onAction="#onDeleteParentButtonClick"/>
+  <Button text="Поиск родителей с 2 и более детьми (через view)" onAction="#onSearchParentsWithTwoOrMoreChildrenButtonClick"/>
+
 </VBox>

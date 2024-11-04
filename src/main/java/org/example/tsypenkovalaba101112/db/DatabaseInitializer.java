@@ -41,6 +41,13 @@ public class DatabaseInitializer {
                     "('ksusha', 'metezh', 'female', '2010-10-02 10:00:00', 'https://masterpiecer-images.s3.yandex.net/5fd1df458f8b387:upscaled', 2);");
             System.out.println(childrenInserted + " children inserted.");
 
+            statement.executeUpdate("CREATE VIEW parents_with_children AS " +
+                    "SELECT p.id, p.mother_first_name, p.father_first_name, p.last_name, COUNT(c.id) AS children_count " +
+                    "FROM parents p " +
+                    "LEFT JOIN childs c ON p.id = c.parent_id " +
+                    "GROUP BY p.id, p.mother_first_name, p.father_first_name, p.last_name " +
+                    "HAVING COUNT(c.id) >= 2; ");
+
             System.out.println("Sql command executed.");
         } catch (SQLException e) {
             e.printStackTrace();

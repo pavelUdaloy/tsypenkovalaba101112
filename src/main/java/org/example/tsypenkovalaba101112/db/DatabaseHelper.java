@@ -89,6 +89,26 @@ public class DatabaseHelper {
         return parents;
     }
 
+    public static List<Parent> searchParentsWithTwoOrMoreChildren() {
+        List<Parent> parents = new ArrayList<>();
+        String query = "SELECT * FROM parents_with_children";
+
+        try (Connection connection = DatabaseConnector.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Parent parent = new Parent(rs.getLong("id"),
+                        rs.getString("mother_first_name"),
+                        rs.getString("father_first_name"),
+                        rs.getString("last_name"));
+                parents.add(parent);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return parents;
+    }
+
     public static ResultSet getChildren() {
         try {
             Connection connection = DatabaseConnector.getConnection();
