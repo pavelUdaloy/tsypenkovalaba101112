@@ -51,6 +51,8 @@ public class ParentsController {
 
     @FXML
     public void initialize() {
+        String css = getClass().getResource("/css/styles.css").toExternalForm();
+        parentsTable.getStylesheets().add(css);
         parentIdColInParents.setCellValueFactory(cellData -> new SimpleLongProperty(cellData.getValue().getId()).asObject());
         parentMotherFirstNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMotherFirstName()));
         parentFatherFirstNameCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFatherFirstName()));

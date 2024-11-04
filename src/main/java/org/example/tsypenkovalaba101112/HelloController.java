@@ -39,6 +39,8 @@ public class HelloController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("children.fxml"));
             VBox childrenView = loader.load();
             Stage childrenStage = new Stage();
+            String css = getClass().getResource("/css/styles.css").toExternalForm();
+            childrenView.getStylesheets().add(css);
             childrenStage.setTitle("Таблица детей");
             childrenStage.initModality(Modality.APPLICATION_MODAL);
             childrenStage.setScene(new Scene(childrenView));
@@ -54,6 +56,8 @@ public class HelloController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("parents.fxml"));
             VBox parentsView = loader.load();
             Stage parentsStage = new Stage();
+            String css = getClass().getResource("/css/styles.css").toExternalForm();
+            parentsView.getStylesheets().add(css);
             parentsStage.setTitle("Таблица родителей");
             parentsStage.initModality(Modality.APPLICATION_MODAL);
             parentsStage.setScene(new Scene(parentsView));

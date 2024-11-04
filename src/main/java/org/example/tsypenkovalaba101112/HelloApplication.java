@@ -15,6 +15,8 @@ public class HelloApplication extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
+        String css = getClass().getResource("/css/styles.css").toExternalForm();
+        scene.getStylesheets().add(css);
         stage.setTitle("Laba 10 11 12!");
         stage.setScene(scene);
         stage.show();

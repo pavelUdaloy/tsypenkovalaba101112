@@ -11,7 +11,7 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Button text="Настройка подключения" onAction="#onSettingsButtonClick"/>
-    <Button text="Таблица детей" onAction="#onViewChildren"/>
-    <Button text="Таблица родителей" onAction="#onViewParents"/>
+    <Button text="Настройка подключения" onAction="#onSettingsButtonClick" styleClass="button"/>
+    <Button text="Таблица детей" onAction="#onViewChildren" styleClass="button"/>
+    <Button text="Таблица родителей" onAction="#onViewParents" styleClass="button"/>
 </VBox>

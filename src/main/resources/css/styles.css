@@ -1,0 +1,38 @@
+.vbox {
+    -fx-background-color: #ffe6f2; /* Светло-розовый фон */
+    -fx-padding: 20;
+}
+
+.button {
+    -fx-background-color: #ff80b3; /* Розовый цвет для кнопок */
+    -fx-text-fill: white; /* Цвет текста */
+    -fx-font-weight: bold; /* Жирный текст */
+    -fx-padding: 10; /* Отступы вокруг текста кнопки */
+    -fx-background-radius: 5; /* Скругление углов */
+}
+
+.button:hover {
+    -fx-background-color: #ff4d94; /* Более темный розовый при наведении */
+}
+
+.table-view {
+    -fx-background-color: #ffccff; /* Светло-розовый фон для таблицы */
+}
+
+.table-column {
+    -fx-text-fill: #ff4d94; /* Цвет текста в заголовках */
+    -fx-font-weight: bold; /* Жирный текст заголовков */
+}
+
+/* Стиль для строк таблицы */
+.table-view .cell {
+    -fx-background-color: #ffccff; /* Светло-розовый фон для ячеек */
+}
+
+.table-view .table-row-cell:filled:selected {
+    -fx-background-color: #ff4d94; /* Цвет для выделенной строки */
+}
+
+.table-view .table-row-cell:filled {
+    -fx-background-color: #ffccff; /* Цвет для обычной строки */
+}

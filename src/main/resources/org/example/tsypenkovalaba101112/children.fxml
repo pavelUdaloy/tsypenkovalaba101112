@@ -13,7 +13,7 @@
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
   </padding>
 
-  <TableView fx:id="childrenTable">
+  <TableView fx:id="childrenTable" styleClass="table-view">
     <columns>
       <TableColumn fx:id="idCol" text="Id" />
       <TableColumn fx:id="firstNameCol" text="First Name" />
@@ -25,9 +25,9 @@
     </columns>
   </TableView>
 
-  <Button text="Поиск по имени" onAction="#onSearchButtonClick"/>
-  <Button text="Сбросить поиск" onAction="#onResetSearchButtonClick"/>
-  <Button text="Добавить запись" onAction="#onAddChildButtonClick"/>
-  <Button text="Редактировать запись" onAction="#onEditChildButtonClick"/>
-  <Button text="Удалить запись" onAction="#onDeleteChildButtonClick"/>
+  <Button text="Поиск по имени" onAction="#onSearchButtonClick" styleClass="button"/>
+  <Button text="Сбросить поиск" onAction="#onResetSearchButtonClick" styleClass="button"/>
+  <Button text="Добавить запись" onAction="#onAddChildButtonClick" styleClass="button"/>
+  <Button text="Редактировать запись" onAction="#onEditChildButtonClick" styleClass="button"/>
+  <Button text="Удалить запись" onAction="#onDeleteChildButtonClick" styleClass="button"/>
 </VBox>

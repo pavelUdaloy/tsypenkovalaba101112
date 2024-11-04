@@ -56,6 +56,9 @@ public class ChildrenController {
 
     @FXML
     public void initialize() {
+        String css = getClass().getResource("/css/styles.css").toExternalForm();
+        childrenTable.getStylesheets().add(css);
+
         idCol.setCellValueFactory(cellData -> new SimpleLongProperty(cellData.getValue().getId()).asObject());
         firstNameCol.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
         lastNameCol.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
