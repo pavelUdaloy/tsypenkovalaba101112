@@ -72,6 +72,10 @@ public class ChildrenController {
         photoCol.setCellValueFactory(cellData -> cellData.getValue().photoProperty());
         parentFatherNameCol.setCellValueFactory(cellData -> cellData.getValue().parentFatherNameProperty());
         parentMotherNameCol.setCellValueFactory(cellData -> cellData.getValue().parentMotherNameProperty());
+
+        firstNameCol.setSortType(TableColumn.SortType.ASCENDING);
+        firstNameCol.setComparator(String::compareTo);
+
         reloadChildren();
     }
 
